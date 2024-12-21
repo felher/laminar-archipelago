@@ -20,7 +20,6 @@ object Scroller:
               .scrollBy(
                 scalajs.js.Dynamic.literal(
                   top = 1 * speed,
-                  behavior = "smooth"
                 )
               )
           if active then

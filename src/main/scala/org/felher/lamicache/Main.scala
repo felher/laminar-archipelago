@@ -55,7 +55,7 @@ object Main:
         ),
         div(
           bem("/islands"),
-          Scroller(if !prompt then 50 else org.scalajs.dom.window.prompt("Speed").toDouble),
+          Scroller(if !prompt then 3 else org.scalajs.dom.window.prompt("Speed").toDouble),
           (0 until 10000).toList.map(i =>
             if i == resetCount then
               val inView = InView(0.25)

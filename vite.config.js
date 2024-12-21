@@ -8,4 +8,5 @@ export default defineConfig({
       polyfill: false
     },
   },
+  base: "/laminar-archipelago/",
 });
