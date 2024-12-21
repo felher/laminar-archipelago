@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8" />
+  <title>MDN Games: Shaders demo</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-size: 0;
+      box-sizing: border-box;
+      background-color: red;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <script id="vertexShader" type="x-shader/x-vertex">
+  void main() {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position.x+10.0, position.y, position.z+5.0, 1.0);
+  }
+</script>
+  <script id="fragmentShader" type="x-shader/x-fragment">
+  uniform int num_cells;
+  uniform vec2 gradients[11 * 11];
+  uniform vec2 uResolution;
+
+  float fade(float t) {
+      return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
+  }
+
+  void main() {
+      float screen_relative_x = gl_FragCoord.x / uResolution.x;
+      float screen_relative_y = gl_FragCoord.y / uResolution.y;
+      int cell_x_index = int(screen_relative_x * float(num_cells));
+      int cell_y_index = int(screen_relative_y * float(num_cells));
+      float relative_cell_width = 1.0 / float(num_cells);
+      float cellRelativeX = (screen_relative_x - float(cell_x_index) * relative_cell_width) / relative_cell_width;
+      float cellRelativeY = (screen_relative_y - float(cell_y_index) * relative_cell_width) / relative_cell_width;
+
+      vec2 bottom_left = gradients[cell_x_index + cell_y_index * (num_cells + 1)];
+      vec2 bottom_right = gradients[cell_x_index + 1 + cell_y_index * (num_cells + 1)];
+      vec2 top_left = gradients[cell_x_index + (cell_y_index + 1) * (num_cells + 1)];
+      vec2 top_right = gradients[cell_x_index + 1 + (cell_y_index + 1) * (num_cells + 1)];
+
+      float top_left_dot = dot(top_left, vec2(cellRelativeX, cellRelativeY - 1.0));
+      float top_right_dot = dot(top_right, vec2(cellRelativeX - 1.0, cellRelativeY - 1.0));
+      float bottom_left_dot = dot(bottom_left, vec2(cellRelativeX, cellRelativeY));
+      float bottom_right_dot = dot(bottom_right, vec2(cellRelativeX - 1.0, cellRelativeY));
+
+      float top = mix(top_left_dot, top_right_dot, fade(cellRelativeX));
+      float bottom = mix(bottom_left_dot, bottom_right_dot, fade(cellRelativeX));
+      float value = mix(bottom, top, fade(cellRelativeY));
+
+      float lightness = (value + 0.5);
+
+      gl_FragColor = vec4(lightness, lightness, lightness, 1.0);
+  }
+</script>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.171.0/build/three.module.js';
+    const WIDTH = window.innerWidth;
+    const HEIGHT = window.innerHeight;
+    const NUM_CELLS = 10;
+
+    const renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setSize(WIDTH, HEIGHT);
+    renderer.setClearColor(0xdddddd, 1);
+    renderer.setViewport(0, 0, WIDTH, HEIGHT);
+    document.body.appendChild(renderer.domElement);
+
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(WIDTH / - 2, WIDTH / 2, HEIGHT / 2, HEIGHT / - 2, -10.1001, 10000);
+    camera.position.z = 1;
+    scene.add(camera);
+
+    const geometry = new THREE.PlaneGeometry(WIDTH, HEIGHT);
+
+    const gradients = [];
+    for (let i = 0; i < (NUM_CELLS + 1) * (NUM_CELLS + 1); i++) {
+      gradients.push(new THREE.Vector2(Math.random() * 2 - 1, Math.random() * 2 - 1));
+    }
+
+    const shaderMaterial = new THREE.ShaderMaterial({
+      vertexShader: document.getElementById("vertexShader").textContent,
+      fragmentShader: document.getElementById("fragmentShader").textContent,
+      uniforms: {
+        gradients: {value: gradients},
+        uResolution: {value: new THREE.Vector2(WIDTH, HEIGHT)},
+        num_cells: {value: NUM_CELLS}
+      }
+    });
+
+    const plane = new THREE.Mesh(geometry, shaderMaterial);
+    scene.add(plane);
+
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.left = -window.innerWidth / 2;
+      camera.right = window.innerWidth / 2;
+      camera.top = window.innerHeight / 2;
+      camera.bottom = -window.innerHeight / 2;
+      camera.updateProjectionMatrix();
+      plane.material.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+      plane.material.needsUpdate = true;
+      plane.geometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
+
+
+    });
+
+    function render() {
+      requestAnimationFrame(render);
+      renderer.render(scene, camera);
+    }
+    render();
+  </script>
+</body>
+
+</html>

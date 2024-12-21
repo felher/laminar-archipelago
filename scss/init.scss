@@ -1,0 +1,17 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+:root {
+  --primary-light: oklch(94.26% 0.1 145.82);
+  --primary-middle: oklch(85.01% 0.1 145.82);
+  --primary-dark: oklch(62.31% 0.1 145.82);
+  --primary-very-dark: oklch(39.17% 0.1 145.82);
+}

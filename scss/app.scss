@@ -1,0 +1,72 @@
+.app {
+  height: 100%;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+
+  &__islands {
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 2rem;
+    overflow-y: auto;
+  }
+
+  &__island {
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+    border: 1px solid var(--primary-dark);
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+
+    * {
+      grid-column: 1 / -1;
+      grid-row: 1 / -1;
+    }
+  }
+
+  &__island-seed {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+    font-weight: bold;
+    color: white;
+    -webkit-text-stroke: 3px black;
+  }
+
+  &__stats {
+    color: var(--primary-very-dark);
+    display: flex;
+    font-size: 2.5rem;
+    background-color: var(--primary-light);
+    border-bottom: 2px solid var(--primary-middle);
+    justify-content: space-around;
+  }
+
+  &__stat {
+    text-align: center;
+    flex: 1;
+  }
+
+}
+
+.animate {
+  animation: text-flash 1.3s ease-in-out;
+}
+
+// text flash animation
+@keyframes text-flash {
+  0% {
+    background-color: yellow;
+  }
+
+  100% {
+    background-color: transparent;
+  }
+}

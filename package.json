@@ -1,0 +1,16 @@
+{
+  "name": "lamicache",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@scala-js/vite-plugin-scalajs": "^1.0.0",
+    "sass": "^1.81.0",
+    "vite": "^6.0.4"
+  }
+}

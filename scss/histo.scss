@@ -1,0 +1,40 @@
+.histo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: end;
+
+  z-index: 1000;
+  opacity: 0.0;
+  pointer-events: none;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding-bottom: 5%;
+
+  &--animate {
+    animation: histo 5s forwards;
+  }
+
+  &__bar {
+    background-color: var(--primary-very-dark);
+  }
+}
+
+// a animation that goes from 1 to zero opacity:
+@keyframes histo {
+  0% {
+    opacity: 1.0;
+  }
+
+  80% {
+    opacity: 1.0;
+  }
+
+  100% {
+    opacity: 0.0;
+  }
+}
