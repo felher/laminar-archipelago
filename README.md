@@ -3,21 +3,43 @@
 ## Table of Contents
 
 1. [Overview](#overview)
-2. [Key Observations](#key-observations)
-3. [Technical Details](#technical-details)
+2. [Demo](#demo)
+3. [Key Observations](#key-observations)
+4. [Technical Details](#technical-details)
    - [Seed Distribution](#seed-distribution)
    - [Workflow](#workflow)
    - [WeakRef Cache](#weakref-cache)
    - [Bloom Filter Enhancement](#bloom-filter-enhancement)
-4. [Metrics](#metrics)
-5. [How to Run](#how-to-run)
-6. [Conclusion](#conclusion)
+5. [Metrics](#metrics)
+6. [How to Run](#how-to-run)
+7. [Conclusion](#conclusion)
 
 ## Overview
 
-This project demonstrates an infinite scroll mechanism that displays fantasy maps of small islands and archipelagos. It evaluates whether JavaScript `WeakRefs` can be used as a caching mechanism for efficiently managing memory and performance. The project utilizes Scala.js and Laminar for UI rendering and interaction.
+This project demonstrates an infinite scroll mechanism that displays fantasy
+maps of small islands and archipelagos. It evaluates whether JavaScript
+`WeakRefs` can be used as a caching mechanism for efficiently managing memory
+and performance. The project utilizes Scala.js and Laminar for UI rendering and
+interaction.
 
 ![screenshot](screen.png)
+
+## Demo
+
+For a demo, go to
+[https://felher.github.io/laminar-archipelago/](https://felher.github.io/laminar-archipelago/).
+Then enter **0, 0, 3**. Read on to know what the values mean.
+
+It first asks for a cache size, which can be 0 if you don't want any bloom
+filter cache at all but only the WeakRef cache. Otherwise 100 is a good start.
+
+It then asks for a reset count, which is the number of maps generated until the
+counter resets. Great if you want your hit rate to measure after the cache is
+hot. If you don't care, just enter 0.
+
+Next it asks for the speed. 3 seems to be a good start. It doesn't control for
+time elapsed between animation frames. This is deliberate, as this automatically slows
+scrolling down if the system is under load.
 
 ## Key Observations
 
@@ -83,11 +105,12 @@ This is a normal Scala.js project integrated with Vite. To run it:
    ```
 4. Open the application in a web browser. The development server will display the URL to open in the terminal.
 
-## Dependencies
-
-- **Scala.js**: For compiling Scala code to JavaScript.
-- **Laminar**: For reactive UI rendering.
-
 ## Conclusion
 
-This project was a test to see whether keeping entries in a map of WeakRefs is good enough. It turns out that it is not, because garbage collection is too aggressive. Adding another caching mechanism like a counting Bloom filter to prevent JavaScript from reclaiming the objects works well. However, in that case, just using a normal cache without any WeakRefs seems to be easier, and the bit of additional caching you get from using the WeakRefs does not seem worth it.
+This project was a test to see whether keeping entries in a map of WeakRefs is
+good enough. It turns out that it is not, because garbage collection is too
+aggressive. Adding another caching mechanism like a counting Bloom filter to
+prevent JavaScript from reclaiming the objects works well. However, in that
+case, just using a normal cache without any WeakRefs seems to be easier, and
+the bit of additional caching you get from using the WeakRefs does not seem
+worth it.
