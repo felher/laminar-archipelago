@@ -1,5 +1,18 @@
 # Laminar Achipelago: Fantasy Maps Infinite Scroll with Scala.js and Laminar
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Key Observations](#key-observations)
+3. [Technical Details](#technical-details)
+   - [Seed Distribution](#seed-distribution)
+   - [Workflow](#workflow)
+   - [WeakRef Cache](#weakref-cache)
+   - [Bloom Filter Enhancement](#bloom-filter-enhancement)
+4. [Metrics](#metrics)
+5. [How to Run](#how-to-run)
+6. [Conclusion](#conclusion)
+
 ## Overview
 
 This project demonstrates an infinite scroll mechanism that displays fantasy maps of small islands and archipelagos. It evaluates whether JavaScript `WeakRefs` can be used as a caching mechanism for efficiently managing memory and performance. The project utilizes Scala.js and Laminar for UI rendering and interaction.
@@ -78,4 +91,3 @@ This is a normal Scala.js project integrated with Vite. To run it:
 ## Conclusion
 
 This project was a test to see whether keeping entries in a map of WeakRefs is good enough. It turns out that it is not, because garbage collection is too aggressive. Adding another caching mechanism like a counting Bloom filter to prevent JavaScript from reclaiming the objects works well. However, in that case, just using a normal cache without any WeakRefs seems to be easier, and the bit of additional caching you get from using the WeakRefs does not seem worth it.
-
