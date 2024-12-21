@@ -28,7 +28,8 @@ interaction.
 
 For a demo, go to
 [https://felher.github.io/laminar-archipelago/](https://felher.github.io/laminar-archipelago/).
-Then enter **0, 0, 3**. Read on to know what the values mean.
+Then enter **0** for cache size, **0** for reset and **3** for speed. Read on
+to know what the values mean.
 
 It first asks for a cache size, which can be 0 if you don't want any bloom
 filter cache at all but only the WeakRef cache. Otherwise 100 is a good start.
